@@ -1,0 +1,50 @@
+version: "3.9"
+services:
+  a:
+    image: alpine
+    command: sh
+    depends_on:
+      - b
+    links:
+      - b:toto
+    volumes:
+      - type: volume
+        source: data
+        target: /yo
+    networks:
+      - mynetwork
+    build:
+      context: ./env1
+      dockerfile: Dockerfile
+      args:
+        - FOLDER=myFolder
+  
+  b:
+    image: alpine
+    command: ping www.google.fr
+    networks:
+      - mynetwork
+  
+  c:
+    image: alpine
+    command: ping www.google.fr
+    networks:
+      - roger
+volumes:
+  data:
+
+networks:
+  mynetwork:
+    driver: bridge
+  roger:
+    driver: bridge
+
+
+#docker compose up
+#docker compose down
+#docker compose ls
+#docker compose run <service>
+#docker build
+
+#passer une var d'env
+#docker compose run -e USER=tintin
